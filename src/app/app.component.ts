@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
+import { EventListenerService } from './event-listener.service';
+import { GlobalDataManagerService } from './global-data-manager.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,17 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'testing-activity-monitor';
+
+  constructor(private eventListenerService: EventListenerService, public gds: GlobalDataManagerService) {
+  }
+
+  @HostListener('window:click') windowClick() {
+    this.eventListenerService.userActivity();
+    this.gds.clicks++;
+  }
+
+  @HostListener('window:keydown') keypress() {
+    this.gds.keypresses++;
+    this.eventListenerService.userActivity();
+  }
 }
